@@ -1,249 +1,231 @@
-# DeepSeek Multi-Task App
 
-A Gradio‐based interface that combines two powerful functionalities in one application:
+# DeepSeek Multi-Task Application
 
-1. **Code Generation** using the DeepSeek-R1-Distill-Qwen-1.5B model  
-2. **Image Description** using the deepseek-vl-1.3b-chat model
+## Overview
+This repository contains a Gradio-based application that leverages two DeepSeek models to provide:
+1. **Code Generation**: Generates Python code snippets from natural language prompts using the `DeepSeek-R1-Distill-Qwen-1.5B` model.
+2. **Image Description**: Produces detailed textual descriptions of uploaded images using the `deepseek-vl-1.3b-chat` model.
 
-This README provides step‐by‐step setup instructions, detailed usage guidelines, and illustrative examples for both modules.
+The application is designed to be user-friendly, featuring adjustable parameters for fine-tuning output creativity and coherence.
 
 ---
 
 ## Table of Contents
-
-- [Features](#features)  
-- [Prerequisites](#prerequisites)  
-- [Installation](#installation)  
-- [Model Downloads & Configuration](#model-downloads--configuration)  
-- [Running the App](#running-the-app)  
-- [Usage Guidelines](#usage-guidelines)  
-  - [1. Code Generation Tab](#1-code-generation-tab)  
-  - [2. Image Description Tab](#2-image-description-tab)  
-- [Examples](#examples)  
-  - [Code Generation Examples](#code-generation-examples)  
-  - [Image Description Examples](#image-description-examples)  
-- [Project Structure](#project-structure)  
-- [Troubleshooting](#troubleshooting)  
-- [Contributing](#contributing)  
-- [License](#license)  
+1. [Features](#features)
+2. [Prerequisites](#prerequisites)
+3. [Installation & Setup](#installation--setup)
+4. [Usage](#usage)
+   - [Launching the App](#launching-the-app)
+   - [Code Generation Tab](#code-generation-tab)
+   - [Image Description Tab](#image-description-tab)
+5. [Examples](#examples)
+6. [Prompt Engineering Strategies](#prompt-engineering-strategies)
+7. [Parameter Choices & Their Effects](#parameter-choices--their-effects)
+8. [Contributing](#contributing)
+9. [License](#license)
 
 ---
 
 ## Features
-
-- **Code Generation**  
-  - Generates Python code snippets from natural language prompts.  
-  - Adjustable generation parameters:  
-    - Maximum tokens (`max_new_tokens`)  
-    - Temperature  
-    - Top-p (nucleus sampling)  
-    - Top-k (top-k sampling)  
-
-- **Image Description**  
-  - Produces detailed (or concise/extreme) descriptions of user‐uploaded images.  
-  - Adjustable generation parameters:  
-    - Maximum tokens (`max_new_tokens`)  
-    - Temperature  
-    - Top-p  
-    - Top-k  
-
-- **Gradio Interface**  
-  - Intuitive UI with two separate tabs.  
-  - Sliders, radio buttons, and text boxes to control generation.  
-  - Live inference on CUDA (if available).  
+- **Interactive Gradio Interface**: Two tabs—one for code generation and one for image description—each with adjustable parameters.
+- **Pretrained Models**:
+- **Code Model**: [`deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B`](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B) for high-quality Python code generation and reasoning capabilities [](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B).   
+- **Vision-Language Model**: [`deepseek-ai/deepseek-vl-1.3b-chat`](https://huggingface.co/deepseek-ai/deepseek-vl-1.3b-chat) for detailed image descriptions and multimodal tasks [](https://huggingface.co/deepseek-ai/deepseek-vl-1.3b-chat).   
+- **Prompt Examples**: Built-in examples that guide each model to produce coherent, relevant outputs.
+- **Parameter Tuning**: Sliders for `max_new_tokens`, `temperature`, `top_p`, and `top_k` allow you to control output length and creativity.
+- **Responsive GPU Support**: Automatically moves models to GPU (CUDA) when available for faster inference.
 
 ---
 
 ## Prerequisites
+- **Python Version**: ≥ 3.8
+- **CUDA**: If using GPU acceleration, ensure CUDA is installed (≥ 11.6 for PyTorch compatibility).
+- **Virtual Environment (Recommended)**: It is recommended to create a virtual environment to isolate dependencies.
 
-1. **Operating System**: Linux, macOS, or Windows (Windows Subsystem for Linux recommended for CUDA builds).  
-2. **Python Version**:  
-   - Python 3.8 or later  
-3. **CUDA (Optional, but recommended for speed)**:  
-   - CUDA 11.x or later (to utilize GPU acceleration for PyTorch).  
-   - NVIDIA drivers and CUDA toolkit properly installed.  
-4. **Disk Space**:  
-   - At least 5–10 GB free for models and dependencies.  
+### Hardware Recommendations
+- **GPU**: NVIDIA GPU with ≥ 12GB VRAM (e.g., T4, A100, RTX A6000) for smooth inference.
+- **CPU**: A modern multi-core CPU if GPU is unavailable (inference will be slower).
 
 ---
 
-## Installation
+## Installation & Setup
 
-1. **Clone the Repository**  
+1. **Clone the repository**:
    ```bash
-   git clone https://github.com/<your-username>/deepseek-multitask-app.git
-   cd deepseek-multitask-app
+   git clone https://github.com/ahmed-eladl/deepseek-multi-task-app.git
+   cd deepseek-multi-task-app
    ```
 
-2. **Create a Python Virtual Environment** (recommended)  
+2. **Create and activate a virtual environment**:
    ```bash
    python3 -m venv venv
-   source venv/bin/activate       # On Windows: venv\Scripts\activate
+   source venv/bin/activate      # Linux/macOS
+   venv\Scripts\activate       # Windows
    ```
 
-3. **Upgrade `pip`**  
+3. **Install dependencies**:
+   Ensure `pip` is up to date:
    ```bash
    pip install --upgrade pip
    ```
-
-4. **Install Dependencies**  
-   The `requirements.txt` should include:  
-   ```text
-   torch>=1.13.0
-   transformers>=4.30.0
-   gradio>=3.34.0
-   deepseek-vl>=1.0.0
-   ```
-   Install with:  
+   Install required packages:
    ```bash
-   pip install -r requirements.txt
+   pip install torch torchvision torchaudio         # PyTorch
+   pip install transformers                         # Hugging Face Transformers
+   pip install gradio                                # Gradio for UI
+   pip install deepseek-vl                            # DeepSeek vision-language utilities
    ```
+> **Note:** If you encounter any issues installing `deepseek-vl`, you can follow the installation instructions here:  
+> https://github.com/deepseek-ai/DeepSeek-VL
 
-   > **Note:**  
-   > - If you plan to run on GPU, ensure your `torch` installation matches your CUDA version. For example:  
-   >   ```bash
-   >   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-   >   ```  
-   >   Replace `cu118` with the appropriate CUDA version label (e.g., `cu117`, `cu113`).  
-   > - `deepseek-vl` uses custom code; ensure `trust_remote_code=True` is allowed when loading the VL model.  
 
-5. **Verify Installation**  
-   Launch a Python REPL and try importing:  
-   ```python
-   >>> import torch
-   >>> import gradio as gr
-   >>> from transformers import AutoModelForCausalLM, AutoTokenizer
-   >>> from deepseek_vl.models import VLChatProcessor, MultiModalityCausalLM
-   >>> from deepseek_vl.utils.io import load_pil_images
-   >>> print("All imports succeeded!")
-   ```
-
----
-
-## Model Downloads & Configuration
-
-When you first run the application, the following models will be automatically downloaded from Hugging Face:
-
-1. **Code Generation Model**  
-   - Model ID: `deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B`  
-   - Purpose: Causal‐LM fine‐tuned for Python code generation  
-
-2. **Visual‐Language Model (VL)**  
-   - Model Path: `deepseek-ai/deepseek-vl-1.3b-chat`  
-   - Purpose: Multimodal chat model that can “see” an image and generate a text description  
-
-These downloads can take several hundred megabytes to a few gigabytes, depending on the model size. Make sure you have a stable internet connection during this step. By default, both are cached under `~/.cache/huggingface/hub/` (or `C:\Users\<User>\.cache\huggingface\hub\` on Windows).
-
-If you need to force a particular cache directory or use a local copy, set the environment variable before running:
-
-```bash
-export TRANSFORMERS_CACHE=/path/to/your/cache
-export HF_HOME=/path/to/your/hf/home
-```
-
----
-
-## Running the App
-
-1. **Navigate to Project Root**  
-   ```bash
-   cd deepseek-multitask-app
-   ```
-
-2. **Launch the Application**  
-   ```bash
-   python app.py
-   ```
-   - By default, Gradio will launch on `http://127.0.0.1:7860` in your browser.  
-   - If you’d like to share your app publicly (Gradio’s tunnel), run:  
-     ```bash
-     python app.py --share
-     ```
-     A public URL (e.g., `https://xyz.gradio.app`) will be generated.  
-
-3. **Quit the App**  
-   - Press `CTRL+C` in the terminal where `app.py` is running.  
-
----
-
-## Usage Guidelines
-
-After launching, you’ll see the Gradio interface with two main tabs:
-
-### 1. Code Generation Tab
-
-- **Title**: “Code Generation (DeepSeek-R1-Distill-Qwen-1.5B)”  
-- **Description**: Brief instructions on transforming natural language requests into Python code.  
-
-#### Components:
-
-1. **Prompt Input (Textbox)**  
-   - Label: `Code Request`  
-   - Placeholder: e.g., _“Create a Python function to calculate factorial of a number”_  
-   - Default Value: “Create a Python function to calculate Fibonacci sequence with O(n) time complexity”  
-   - Allows up to four lines of text.  
-
-2. **Generation Parameters Accordion**  
-   - **Max Tokens (Slider)**  
-     - Range: 100 to 2048 (default: 512)  
-     - Controls the maximum number of tokens the model can generate.  
-   - **Temperature (Slider)**  
-     - Range: 0.1 to 1.0 (step 0.1, default: 0.6)  
-     - Higher values → more random outputs; lower → more deterministic.  
-   - **Top-p (Slider)**  
-     - Range: 0.1 to 1.0 (step 0.1, default: 0.9)  
-     - Nucleus sampling cutoff.  
-   - **Top-k (Slider)**  
-     - Range: 1 to 100 (step 1, default: 50)  
-     - Restricts sampling to top‐k tokens.  
-
-3. **“Generate Code” Button**  
-   - Clicking triggers the `generate_code_snippet` function with the above inputs.  
-
-4. **Generated Python Code (Textbox)**  
-   - Displays the raw Python snippet returned by the model (no comments or extra tokens).  
-   - Up to 20 lines tall.  
-
----
+4. **Verify GPU availability** (optional):
    
-### 2. Image Description Tab
+   ```python
+   import torch
+   print(torch.cuda.is_available())  # Should return True if GPU is accessible
+   ```
 
-- **Title**: “Image Description (deepseek-vl-1.3b-chat)”  
-- **Description**: Generate detailed descriptions from uploaded images.  
+---
 
-#### Components:
+## Usage
 
-1. **Image Input (Upload / Clipboard)**  
-   - Label: `Upload Image`  
-   - Users can drag & drop, click to upload from local disk, or paste from clipboard.  
-   - Output is a PIL image object.  
+### Launching the App
+Run the main Python script to start the Gradio application:
+```bash
+python app.py
+```
+- The application will launch locally at `http://localhost:7860/` by default.
+<!-- - To make it publicly accessible, use the `share=True` flag in `app.launch()`, which generates a publicly shareable URL (e.g., https://xyz.gradio.app). -->
+- If you’d like to share your app publicly (Gradio’s tunnel), run:  
+   ```bash
+   python app.py --share
+   ```
+   A public URL (e.g., `https://xyz.gradio.app`) will be generated.  
+---
 
-2. **Description Parameters Accordion**  
-   - **Detail Level (Radio Buttons)**  
-     - Options:  
-       - `Concise`: Short, high‐level summary (1–2 sentences).  
-       - `Detailed`: In‐depth description (default).  
-       - `Extreme`: Exhaustive enumeration of every visible detail.  
-   - **Max Tokens (Slider)**  
-     - Range: 100 to 2048 (default: 512)  
-   - **Temperature (Slider)**  
-     - Range: 0.1 to 1.0 (step 0.1, default: 0.6)  
-   - **Top-p (Slider)**  
-     - Range: 0.1 to 1.0 (step 0.1, default: 0.9)  
-   - **Top-k (Slider)**  
-     - Range: 1 to 100 (step 1, default: 50)  
+### Code Generation Tab
+1. **Navigate to the "🧑‍💻 Code Generation" tab**.
+2. **Prompt Input**:
+   - Enter prompt request for a Python code snippet.  
+     Example placeholder:  
+     ```
+     Create a Python function to calculate factorial of a number using recursion.
+     ```
+3. **Generation Parameters**:
+   - **Max Tokens** (`max_new_tokens`): Maximum number of tokens the model will generate. Default: 512.
+   - **Temperature** (`temperature`): Controls randomness and creativity (0.1–1.0). Lower values → more deterministic output.
+   - **Top-p** (`top_p`): Nucleus sampling threshold (0.1–1.0). The model samples from the smallest possible set of tokens with cumulative probability ≥ `top_p`.
+   - **Top-k** (`top_k`): Only consider the top `k` highest-probability tokens at each step.
+4. **Generate Code**:
+   - Click **Generate Code**. The generated Python snippet will appear in the output textbox.
+   - The code is cleaned to remove system prompts, code fences, and special tokens.
 
-3. **“Describe Image” Button**  
-   - Triggers the `generate_image_description` function.  
+---
 
-4. **Image Description (Textbox)**  
-   - Shows the generated description as plain text.  
-   - Up to 20 lines tall.  
+### Image Description Tab
+1. **Navigate to the "🖼️ Image Description" tab**.
+2. **Upload Image**:
+   - Click **Upload Image** to select an image from your local machine or use the clipboard.
+3. **Description Parameters**:
+   - **Detail Level**: Choose among:
+     - **Concise**: High-level summary of the image.
+     - **Detailed**: Paragraph-style description with visible objects, context, and interactions.
+     - **Extreme**: Exhaustive listing of every visible detail.
+   - **Max Tokens** (`max_new_tokens`): Default: 512.
+   - **Temperature**, **Top-p**, **Top-k**: Same definitions as above. Adjust to control creativity vs. accuracy.
+4. **Describe Image**:
+   - Click **Describe Image**. The description will appear in the output textbox.
 
 ---
 
 ## Examples
-...
-## License
 
-This project is licensed under the MIT License.
+### Code Generation Example
+![Alt text](examples/code_generation.png)  
+
+### Image Description Example
+![Alt text](examples/image_description.png)  
+---
+
+## Prompt Engineering Strategies
+
+### 1. System Messages & Role Conditioning (Code Generation)
+- **Role Specification**: We explicitly define the model's role as a "code-generation AI." This orients the model toward returning only executable Python code.
+- **Instruction Clarity**: The system message instructs:  
+  > "You are a code-generation AI. When given a prompt, you must return only the Python code snippet that fulfills the request. Do NOT include any explanations, JSON schemas, commentary, or special tokens."
+- **Priming with Examples**: We include a prior user–assistant exchange (e.g., Fibonacci example).  
+  - This “few-shot” style provides the model with a clear pattern:  
+    1. **User**: “Generate a Python code snippet that fulfills this request: …”  
+    2. **Assistant**: [Python code snippet].  
+  - By showing how the assistant responds, the model learns to mimic that format for new prompts.
+- **Cleaning Layer**: After generation, we use `clean_generated_output()` to strip away any residual instructions, special tokens, or code fences.
+
+### 2. Prompt Structure (Image Description)
+- **Detail Level Prompting**: We define three levels—Concise, Detailed, Extreme—to guide the granularity of the description.  
+  - The “User” message is:  
+    ```
+    <image_placeholder> [Detail Prompt]
+    ```  
+  - Example for Detailed:  
+    ```
+    <image_placeholder> Describe an image in detail.
+    ```
+- **Conversation Formatting**: We frame input as a two-message conversation:  
+  1. User: containing image placeholder + directive.  
+  2. Assistant: empty content where the model will generate a description.
+- **Force Batchify**: Ensures consistent processing whether one image or multiple images are provided.
+
+---
+
+## Parameter Choices & Their Effects
+
+Adjustable parameters give you control over the model’s creativity, output length, and sampling behavior:
+
+1. **max_new_tokens**:
+   - Defines the maximum number of tokens to be generated.  
+   - **Typical Ranges**:
+     - Code Generation: 256–1024 (depending on expected snippet length).
+     - Image Description: 128–512 (longer descriptions for “Extreme”).
+   - **Effect**: Larger values allow longer outputs but may increase inference time and cost.
+
+2. **temperature (0.1–1.0)**:
+   - Controls randomness:  
+     - **Low (0.1–0.3)**: Outputs become more deterministic, sticking to high-probability tokens—ideal for precise code generation.  
+     - **Medium (0.4–0.7)**: Balances creativity and coherence—good for descriptive tasks.  
+     - **High (0.8–1.0)**: More randomness—potentially more creative but may generate irrelevant or redundant content.
+
+3. **top_p (0.1–1.0)**:
+   - **Nucleus Sampling**: The model considers only the smallest set of tokens whose cumulative probability ≥ `top_p`.  
+   - **Lower `top_p` (0.1–0.5)**: Restricts to highest probability tokens—more conservative output.  
+   - **Higher `top_p` (0.8–1.0)**: Includes broader token set—encourages creative or “out-of-the-box” phrases.
+
+4. **top_k (1–100)**:
+   - **Top-K Sampling**: Only the top `k` highest-probability tokens are considered at each generation step.  
+   - **Lower `k` (1–10)**: Very conservative—model picks from very limited options.  
+   - **Higher `k` (50–100)**: More variety—can help when generating narrative or descriptive text (e.g., “Detailed” – “Extreme” levels).
+
+### Guidelines for Parameter Tuning
+- **Code Generation**:
+  - **Use Lower `temperature` (0.1–0.4)** and **`top_p` ≈ 0.9**, **`top_k` ≈ 10–50** for concise, correct snippets.
+  - **Increase `max_new_tokens`** when expecting longer utility functions or multi-function scripts.
+- **Image Description**:
+  - **Temperature (0.4–0.7)** and **`top_p` (0.9–1.0)** work well for natural, varied descriptions.
+  - **Adjust `detail_level`** based on desired verbosity.  
+    - **Concise**: shorter token limit (128–256).  
+    - **Detailed / Extreme**: higher token limit (512+).
+
+---
+
+## Contributing
+Contributions, issues, and feature requests are welcome!  
+1. Fork the repository.  
+2. Create a new branch: `git checkout -b feature/your-feature`.  
+3. Commit your changes: `git commit -m "Add new feature"`.  
+4. Push to the branch: `git push origin feature/your-feature`.  
+5. Open a Pull Request describing your changes.
+
+---
+
+## License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.

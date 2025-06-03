@@ -1,7 +1,7 @@
 
-# DeepSeek Multi-Task Application
+# 🚀 DeepSeek Multi-Task Application 🚀
 
-## Overview
+## 🔍 Overview
 This repository contains a Gradio-based application that leverages two DeepSeek models to provide:
 1. **Code Generation**: Generates Python code snippets from natural language prompts using the `DeepSeek-R1-Distill-Qwen-1.5B` model.
 2. **Image Description**: Produces detailed textual descriptions of uploaded images using the `deepseek-vl-1.3b-chat` model.
@@ -10,7 +10,7 @@ The application is designed to be user-friendly, featuring adjustable parameters
 
 ---
 
-## Table of Contents
+## 📋 Table of Contents
 1. [Features](#features)
 2. [Prerequisites](#prerequisites)
 3. [Installation & Setup](#installation--setup)
@@ -26,29 +26,29 @@ The application is designed to be user-friendly, featuring adjustable parameters
 
 ---
 
-## Features
+## 🌟 Features
 - **Interactive Gradio Interface**: Two tabs—one for code generation and one for image description—each with adjustable parameters.
 - **Pretrained Models**:
-- **Code Model**: [`deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B`](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B) for high-quality Python code generation and reasoning capabilities [](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B).   
-- **Vision-Language Model**: [`deepseek-ai/deepseek-vl-1.3b-chat`](https://huggingface.co/deepseek-ai/deepseek-vl-1.3b-chat) for detailed image descriptions and multimodal tasks [](https://huggingface.co/deepseek-ai/deepseek-vl-1.3b-chat).   
+   - **Code Model**: [`deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B`](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B) for high-quality Python code generation and reasoning capabilities [](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B).   
+   - **Vision-Language Model**: [`deepseek-ai/deepseek-vl-1.3b-chat`](https://huggingface.co/deepseek-ai/deepseek-vl-1.3b-chat) for detailed image descriptions and multimodal tasks [](https://huggingface.co/deepseek-ai/deepseek-vl-1.3b-chat).   
 - **Prompt Examples**: Built-in examples that guide each model to produce coherent, relevant outputs.
 - **Parameter Tuning**: Sliders for `max_new_tokens`, `temperature`, `top_p`, and `top_k` allow you to control output length and creativity.
 - **Responsive GPU Support**: Automatically moves models to GPU (CUDA) when available for faster inference.
 
 ---
 
-## Prerequisites
+## 📦 Prerequisites
 - **Python Version**: ≥ 3.8
 - **CUDA**: If using GPU acceleration, ensure CUDA is installed (≥ 11.6 for PyTorch compatibility).
 - **Virtual Environment (Recommended)**: It is recommended to create a virtual environment to isolate dependencies.
 
-### Hardware Recommendations
+### 🖥️ Hardware Recommendations
 - **GPU**: NVIDIA GPU with ≥ 12GB VRAM (e.g., T4, A100, RTX A6000) for smooth inference.
 - **CPU**: A modern multi-core CPU if GPU is unavailable (inference will be slower).
 
 ---
 
-## Installation & Setup
+## 🛠️ Installation & Setup
 
 1. **Clone the repository**:
    ```bash
@@ -88,9 +88,9 @@ The application is designed to be user-friendly, featuring adjustable parameters
 
 ---
 
-## Usage
+## 📝 Usage
 
-### Launching the App
+### 🚀 Launching the App
 Run the main Python script to start the Gradio application:
 ```bash
 python app.py
@@ -104,7 +104,7 @@ python app.py
    A public URL (e.g., `https://xyz.gradio.app`) will be generated.  
 ---
 
-### Code Generation Tab
+### 🧑‍💻 Code Generation Tab
 1. **Navigate to the "🧑‍💻 Code Generation" tab**.
 2. **Prompt Input**:
    - Enter prompt request for a Python code snippet.  
@@ -123,7 +123,7 @@ python app.py
 
 ---
 
-### Image Description Tab
+### 🖼️ Image Description Tab
 1. **Navigate to the "🖼️ Image Description" tab**.
 2. **Upload Image**:
    - Click **Upload Image** to select an image from your local machine or use the clipboard.
@@ -139,7 +139,7 @@ python app.py
 
 ---
 
-## Examples
+## 💡 Examples
 
 ### Code Generation Example
 ![Alt text](examples/code_generation.png)  
@@ -148,7 +148,7 @@ python app.py
 ![Alt text](examples/image_description.png)  
 ---
 
-## Prompt Engineering Strategies
+## 🧠 Prompt Engineering Strategies
 
 ### 1. System Messages & Role Conditioning (Code Generation)
 - **Role Specification**: We explicitly define the model's role as a "code-generation AI." This orients the model toward returning only executable Python code.
@@ -178,7 +178,7 @@ python app.py
 
 ---
 
-## Parameter Choices & Their Effects
+## 🎛️ Parameter Choices & Their Effects
 
 Adjustable parameters give you control over the model’s creativity, output length, and sampling behavior:
 
@@ -217,7 +217,7 @@ Adjustable parameters give you control over the model’s creativity, output len
 
 ---
 
-## Contributing
+## 🤝 Contributing
 Contributions, issues, and feature requests are welcome!  
 1. Fork the repository.  
 2. Create a new branch: `git checkout -b feature/your-feature`.  
@@ -227,5 +227,5 @@ Contributions, issues, and feature requests are welcome!
 
 ---
 
-## License
+## 📄 License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.

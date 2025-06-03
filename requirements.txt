@@ -1,0 +1,15 @@
+# requirements.txt
+# Core dependencies for DeepSeek Multi-Task Application
+
+torch>=2.0.0
+transformers>=4.30.0
+gradio>=4.0.0
+Pillow>=9.0.0
+
+# DeepSeek VL dependencies
+deepseek-vl
+
+# Additional dependencies that might be needed
+accelerate
+tokenizers
+safetensors

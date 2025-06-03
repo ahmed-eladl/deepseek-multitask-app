@@ -155,7 +155,7 @@ python app.py
 - **Instruction Clarity**: The system message instructs:  
   > "You are a code-generation AI. When given a prompt, you must return only the Python code snippet that fulfills the request. Do NOT include any explanations, JSON schemas, commentary, or special tokens."
 - **Priming with Examples**: We include a prior user–assistant exchange (e.g., Fibonacci example).  
-  - This “few-shot” style provides the model with a clear pattern:  
+  - This **“few-shot”** style provides the model with a clear pattern:  
     1. **User**: “Generate a Python code snippet that fulfills this request: …”  
     2. **Assistant**: [Python code snippet].  
   - By showing how the assistant responds, the model learns to mimic that format for new prompts.
